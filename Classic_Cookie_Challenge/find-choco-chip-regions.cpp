@@ -1,3 +1,40 @@
+/* Classic Cookie Challenge #1
+
+https://www.youtube.com/watch?v=a4Py6rrf2Dk
+
+Problem Explanation:
+
+		1 | 0 | 0 | 1 | 0
+		-----------------
+		1 | 0 | 1 | 0 | 0
+		-----------------
+		0 | 0 | 1 | 0 | 1
+		-----------------
+	 	1 | 0 | 1 | 0 | 1
+		-----------------
+		1 | 0 | 1 | 1 | 0
+
+Consider above matrix as a cookie. 1 = chocochips, 0 = other.
+
+We need to find regions of chochips here. chocochips in a region should be adjacent horizontally or vertically but not diagonally.
+Need output as number of chocochips in each regions, e.g for above cookie output can be [2,1,2,5,2]. Order of elements in output does not matter. 
+
+
+Solution Approach:
+
+If we consider above matrix as a graph and each chocochip ( i.e matrix[i][j] = 1) as a node of the graph, then we need to find connected components
+in this graph and output number of nodes in each connected component. 
+
+Finding connected components can be done using any graph traversal algorithm, e.g: BFS or DFS. 
+We need to consider two things for this problem:
+
+	1. In a classic BFS/DFS, we traverse all adjacent nodes. But here we can not go diagonally. Only vertical and horizontal adjacent elements to be considered.
+	2. As we traverse the graph through BFS/DFS, we need to maintain count of nodes traversed in the component.  
+
+*/
+
+// Solution Code:
+
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -173,3 +210,32 @@ int main(){
 
 	return 0;
 }
+
+/*
+
+ Code Explanation
+
+C[][] = cookie. rows = number of rows, cols = number of cols.
+
+isVisited( i, j) 	- checks whether C[]i[j] is already visited.
+visit( i, j ) 		- marks C[i][j] = 2 i.e visited
+isChocoChip( i, j)	- checks whether C[i][j] = 1 i.e is it a chocochip 
+isValid(i , j)		- checks whether i, j are valid row/col, i.e 0 < i < rows and 0 < j < cols
+
+DFS_Count( i , j )	- This function performs DFS on matrix C starting from item C[i][j].
+					- Recursively calls DFS for horizontally and vertically adjacent elements  
+					- i.e perform DFS for C[i-1][j], C[i+1][j], C[i][j-1], C[i][j+1]
+					- Count 1 for C[i][j] and add counts returned from recursively called DFSs to make the total count
+
+
+BFS_Count( i, j) 	- This function performs BFS on matrix C starting from item C[i][j].
+					- add count for horizontally and vertically adjacent elements  
+					- i.e perform BFS for C[i-1][j], C[i+1][j], C[i][j-1], C[i][j+1]
+
+findChocoLine()		- for each element in C[i][j] in C[][], start from position (i,j) and perform BFS/DFS from there, 
+					- provided C[i][j] has not yet visited and C[i][j] is a chocochip  
+	
+main()				- Main function for user input and output
+					- Call findChocoLine
+
+*/
